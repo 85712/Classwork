@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resells Dashboard</title>
+
+
+  <style>
+    :root {
+      --bg: #080b18;
+      --side: #070a16;
+      --panel: #0d1222;
+      --line: #202940;
+      --text: #f4f6fb;
+      --muted: #8994ab;
+      --green: #67c99b;
+    }
+
+
+    { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, Arial, sans-serif;
+    }
+
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+
+    button { cursor: pointer; }
+
+
+    .shell {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      min-height: 100vh;
+    }
+
+
+    aside {
+      background: var(--side);
+      border-right: 1px solid #172036;
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+
+    .brand {
+      font-size: 23px;
+      font-weight: 850;
+      margin: 0 8px 42px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+
+    .logo {
+      border: 1px solid #31554b;
+      color: var(--green);
+      border-radius: 13px;
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+    }
+
+
+    .brand em {
+      color: var(--green);
+      font-style: normal;
+    }
+
+
+    .nav {
+      display: grid;
+      gap: 7px;
+    }
+
+
+    .nav button {
+      border: 0;
+      background: none;
+      color: #9ba6bb;
+      text-align: left;
+      padding: 13px;
+      border-radius: 11px;
+      font-weight: 650;
+    }
+
+
+    .nav button.active {
+      color: white;
+      background: linear-gradient(90deg,#12312b,#101729);
+      box-shadow: inset 4px 0 var(--green);
+    }
+
+
+    .count {
+      float: right;
+      background: var(--green);
+      color: #07170f;
+      border-radius: 15px;
+      padding: 2px 8px;
+      font-size: 11px;
+    }
+
+
+    .profile {
+      margin-top: auto;
+      border: 1px solid #273149;
+      border-radius: 14px;
+      padding: 14px;
+      background: #101729;
+    }
+
+
+    .profile small {
+      display: block;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+
+    main {
+      padding: 34px;
+      max-width: 1600px;
+      width: 100%;
+      margin: auto;
+    }
+
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 27px;
+    }
+
+
+    .top h1 {
+      margin: 0 0 7px;
+      font-size: 30px;
+    }
+
+
+    .muted {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+
+    .pill, .iconbtn {
+      background: #111729;
+      border: 1px solid #293249;
+      color: #c8d0df;
+      border-radius: 11px;
+      padding: 11px 14px;
+      font-size: 12px;
+    }
+
+
+    .primary {
+      background: var(--green);
+      color: #07170f;
+      border: 0;
+      border-radius: 11px;
+      padding: 12px 17px;
+      font-weight: 850;
+    }
+
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5,1fr);
+      gap: 13px;
+      margin-bottom: 28px;
+    }
+
+
+    .stat, .panel, .find, .item {
+      background: linear-gradient(145deg,#101629,#0c1020);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+    }
+
+
+    .stat {
+      padding: 18px;
+      min-height: 135px;
+    }
+
+
+    .stathead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 17px;
+    }
+
+
+    .ico {
+      width: 39px;
+      height: 39px;
+      border-radius: 12px;
+      background: #15302b;
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-size: 19px;
+    }
+
+
+    .delta {
+      font-size: 10px;
+      color: var(--green);
+      border: 1px solid #29463e;
+      background: #13241f;
+      padding: 5px 8px;
+      border-radius: 20px;
+    }
+
+
+    .stat label {
+      color: #9ba6bb;
+      font-size: 12px;
+    }
+
+
+    .stat strong {
+      display: block;
+      font-size: 25px;
+      margin-top: 5px;
+    }
+
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0,1.8fr) minmax(280px,.9fr);
+      gap: 23px;
+    }
+
+
+    .heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 0 15px;
+    }
+
+
+    .heading h2 {
+      font-size: 19px;
+      margin: 0;
+    }
+
+
+    .link {
+      color: var(--green);
+      border: 0;
+      background: none;
+      font-weight: 750;
+    }
+
+
+    .finds {
+      display: grid;
+      gap: 13px;
+    }
+
+
+    .find {
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 125px 1fr;
+      gap: 16px;
+    }
+
+
+    .photo {
+      height: 126px;
+      border-radius: 12px;
+      background: linear-gradient(145deg,#293248,#151c2d);
+      display: grid;
+      place-items: center;
+      font-size: 53px;
+    }
+
+
+    .findtop {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+
+    .find h3 {
+      margin: 3px 0 5px;
+      font-size: 16px;
+    }
+
+
+    .profit {
+      color: var(--green);
+      font-weight: 850;
+      font-size: 18px;
+    }
+
+
+    .profit small {
+      display: block;
+      color: #77839b;
+      font-size: 9px;
+      text-align: right;
+    }
+
+
+    .source {
+      display: inline-block;
+      background: #1a2031;
+      border: 1px solid #30384d;
+      padding: 5px 8px;
+      border-radius: 7px;
+      color: #c4ccda;
+      font-size: 11px;
+      margin-top: 8px;
+    }
+
+
+    .buy {
+      display: flex;
+      gap: 22px;
+      border-top: 1px solid #20283b;
+      padding-top: 10px;
+      margin-top: 12px;
+      color: #929db3;
+      font-size: 11px;
+    }
+
+
+    .buy strong {
+      display: block;
+      color: #edf1f8;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+
+    .buttons {
+      display: flex;
+      gap: 9px;
+      margin-top: 11px;
+    }
+
+
+    .buttons button {
+      flex: 1;
+      background: #191e30;
+      border: 1px solid #303950;
+      color: white;
+      border-radius: 8px;
+      padding: 9px;
+      font-size: 11px;
+    }
+
+
+    .right {
+      display: grid;
+      gap: 22px;
+      align-content: start;
+    }
+
+
+    .pulse { padding: 20px; }
+
+
+    .pulse h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+
+    .pulseitem {
+      display: flex;
+      gap: 12px;
+      margin: 18px 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+
+    .pulseitem b { color: var(--green); }
+
+
+    .pulseitem small {
+      display: block;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+
+    .wide {
+      width: 100%;
+      padding: 13px;
+      background: #191e30;
+      color: white;
+      border: 1px solid #2b344a;
+      border-radius: 10px;
+    }
+
+
+    .quick {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+
+    .quick button {
+      text-align: left;
+      padding: 15px;
+      background: #0e1425;
+      color: white;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+
+    .quick small {
+      display: block;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 13px;
+    }
+
+
+    .item { padding: 15px; }
+
+
+    .item .photo {
+      height: 120px;
+      margin-bottom: 12px;
+    }
+
+
+    .item h3 {
+      font-size: 15px;
+      margin: 0 0 5px;
+    }
+
+
+    .item p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+
+    .price {
+      font-size: 21px;
+      font-weight: 850;
+      margin: 12px 0;
+    }
+
+
+    .item button {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #29463e;
+      background: #11221f;
+      color: var(--green);
+      border-radius: 9px;
+    }
+
+
+    .search {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+
+    .search input, .search select,
+    .field input, .field select, .field textarea {
+      background: #101729;
+      color: white;
+      border: 1px solid #293249;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+
+    .search input {
+      flex: 1;
+      min-width: 0;
+    }
+
+
+    .panel { padding: 20px; }
+
+
+    .formgrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+
+    .field label {
+      font-size: 12px;
+      color: #aab4c8;
+    }
+
+
+    .field.full { grid-column: 1/-1; }
+
+
+    .note {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+
+    .tablewrap { overflow: auto; }
+
+
+    .tablewrap table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 550px;
+    }
+
+
+    .tablewrap th, .tablewrap td {
+      text-align: left;
+      padding: 13px;
+      border-bottom: 1px solid #20283b;
+      font-size: 12px;
+    }
+
+
+    .tablewrap th { color: var(--muted); }
+
+
+    .up {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+
+    .empty {
+      padding: 35px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed #303950;
+      border-radius: 14px;
+    }
+
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #e4fff1;
+      color: #10251b;
+      padding: 12px 17px;
+      border-radius: 10px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+
+    .toast.show { opacity: 1; }
+
+
+    .foot {
+      text-align: center;
+      color: #66718a;
+      font-size: 10px;
+      margin-top: 25px;
+    }
+
+
+    @media(max-width:1100px) {
+      .stats { grid-template-columns: repeat(3,1fr); }
+      .layout { grid-template-columns: 1fr; }
+      .right { grid-template-columns: 1fr 1fr; }
+    }
+
+
+    @media(max-width:720px) {
+      .shell { display: block; }
+      aside { min-height: 0; padding: 14px; }
+      .brand { margin: 0 0 12px; }
+      .nav { display: flex; overflow: auto; }
+      .nav button { white-space: nowrap; padding: 10px; }
+      .profile { display: none; }
+      main { padding: 20px 14px; }
+      .top { align-items: flex-start; flex-direction: column; }
+      .actions { flex-wrap: wrap; }
+      .stats { grid-template-columns: repeat(2,1fr); }
+      .right { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: repeat(2,1fr); }
+      .find { grid-template-columns: 95px 1fr; }
+      .photo { height: 105px; }
+    }
+
+
+    @media(max-width:450px) {
+      .cards { grid-template-columns: 1fr; }
+      .find { grid-template-columns: 1fr; }
+      .photo { height: 145px; }
+      .formgrid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .stat { padding: 13px; }
+      .stat strong { font-size: 21px; }
+    }
+  </style>
+</head>
+
+
+<body>
+<div class="shell">
+
+
+  <aside>
+    <div class="brand">
+      <div class="logo">↗</div>
+      Re<em>sells</em>
+    </div>
+
+
+    <nav class="nav">
+      <button class="active" data-page="dashboard">▦ Dashboard</button>
+      <button data-page="feed">◉ Live Feed</button>
+      <button data-page="listings">☷ Listing Manager</button>
+      <button data-page="saved">♡ Saved Items</button>
+      <button data-page="analytics">▥ Analytics</button>
+      <button data-page="settings">⚙ Settings</button>
+    </nav>
+
+
+    <div class="profile">
+      <b>Resells Member</b>
+      <small>Starter workspace</small>
+      <small>Demo workspace · Local browser data</small>
+    </div>
+  </aside>
+
+
+  <main>
+    <div class="top">
+      <div>
+        <h1 id="title">Dashboard</h1>
+        <div class="muted" id="subtitle">
+          Your resale radar: discover opportunities and make informed decisions.
+        </div>
+      </div>
+
+
+      <div class="actions">
+        <div class="pill">Market overview · Demo data</div>
+        <button class="primary" onclick="go('feed')">New Search</button>
+      </div>
+    </div>
+
+
+    <!-- DASHBOARD -->
+    <section class="page active" id="dashboard">
+
+
+      <div class="stats">
+        <div class="stat">
+          <div class="ico">$</div>
+          <label>Potential Profit</label>
+          <strong>$2,840</strong>
+        </div>
+
+
+        <div class="stat">
+          <div class="ico">↗</div>
+          <label>Items Listed</label>
+          <strong id="listedCount">3</strong>
+        </div>
+
+
+        <div class="stat">
+          <div class="ico">▥</div>
+          <label>Avg. ROI Estimate</label>
+          <strong>32%</strong>
+        </div>
+
+
+        <div class="stat">
+          <div class="ico">⌁</div>
+          <label>Active Searches</label>
+          <strong>85</strong>
+        </div>
+
+
+        <div class="stat">
+          <div class="ico">♧</div>
+          <label>Items Analyzed</label>
+          <strong>14,302</strong>
+        </div>
+      </div>
+
+
+      <div class="layout">
+        <div>
+          <div class="heading">
+            <h2>Recent Finds</h2>
+            <button class="link" onclick="go('feed')">View All →</button>
+          </div>
+          <div class="finds" id="recent"></div>
+        </div>
+
+
+        <div class="right">
+          <div class="panel pulse">
+            <h2>Market Pulse</h2>
+            <div class="pulseitem">
+              <div class="ico">🔥</div>
+              <div>Collectibles are showing <b>strong interest</b>.
+                <small>Example market signal</small>
+              </div>
+            </div>
+            <div class="pulseitem">
+              <div class="ico">↗</div>
+              <div>Some sneaker styles show <b>rising activity</b>.
+                <small>Example market signal</small>
+              </div>
+            </div>
+            <button class="wide" onclick="go('analytics')">View Market Insights →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- PRODUCT FEED -->
+    <section class="page" id="feed">
+      <div class="heading">
+        <h2>Live Feed</h2>
+      </div>
+
+
+      <div class="search">
+        <input id="q" placeholder="Search products..." oninput="renderFeed()">
+
+
+        <select id="filter" onchange="renderFeed()">
+          <option value="all">All opportunities</option>
+          <option value="Rising">Rising</option>
+          <option value="Popular">Popular</option>
+        </select>
+      </div>
+
+
+      <div class="cards" id="feedCards"></div>
+    </section>
+
+
+    <!-- LISTINGS -->
+    <section class="page" id="listings">
+      <div class="heading">
+        <h2>Listing Manager</h2>
+        <button class="primary" onclick="go('sell')">+ Create Listing</button>
+      </div>
+
+
+      <div class="cards" id="listingCards"></div>
+    </section>
+
+
+    <!-- SAVED ITEMS -->
+    <section class="page" id="saved">
+      <div class="heading">
+        <h2>Saved Items</h2>
+      </div>
+      <div class="cards" id="savedCards"></div>
+    </section>
+
+
+    <!-- ANALYTICS -->
+    <section class="page" id="analytics">
+      <div class="heading">
+        <h2>Market Analytics</h2>
+      </div>
+
+
+      <div class="tablewrap panel">
+        <table>
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th>Est. Price</th>
+            <th>7-Day Change</th>
+            <th>Interest</th>
+            <th>Signal</th>
+          </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+
+
+      <p class="note">
+        Sample values only. Live price tracking requires external data integrations.
+      </p>
+    </section>
+
+
+    <!-- SETTINGS -->
+    <section class="page" id="settings">
+      <div class="panel">
+        <h2>Settings</h2>
+        <div class="field">
+          <label>Workspace name</label>
+          <input value="Resells Demo">
+        </div>
+        <p class="note">Account and cloud-sync settings are not connected.</p>
+      </div>
+    </section>
+
+
+    <!-- CREATE LISTING -->
+    <section class="page" id="sell">
+      <div class="heading">
+        <h2>Create a Listing</h2>
+      </div>
+
+
+      <div class="panel">
+        <form id="sellForm">
+          <div class="formgrid">
+
+
+            <div class="field">
+              <label>Product name *</label>
+              <input id="name" required placeholder="Limited edition sneakers">
+            </div>
+
+
+            <div class="field">
+              <label>Category</label>
+              <select id="cat">
+                <option>Sneakers & Fashion</option>
+                <option>Technology</option>
+                <option>Collectibles</option>
+                <option>Gaming</option>
+                <option>Home & Lifestyle</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+
+            <div class="field">
+              <label>Asking price (USD) *</label>
+              <input id="price" type="number" min="1" required placeholder="150">
+            </div>
+
+
+            <div class="field">
+              <label>Condition</label>
+              <select id="condition">
+                <option>New</option>
+                <option>Like new</option>
+                <option>Good</option>
+                <option>Fair</option>
+              </select>
+            </div>
+
+
+            <div class="field full">
+              <label>Description</label>
+              <textarea id="desc" rows="3"></textarea>
+            </div>
+
+
+          </div>
+
+
+          <p class="note">
+            Demo only: listings stay in this browser. Payments and shipping are not connected.
+          </p>
+
+
+          <button class="primary">Publish Listing</button>
+        </form>
+      </div>
+    </section>
+
+
+    <div class="foot">
+      Resells prototype · Sample market data only · Not a guarantee of resale value.
+    </div>
+  </main>
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+  const products = [
+    {
+      id: 1,
+      name: "PlayStation 5 Slim Bundle",
+      cat: "Gaming",
+      price: 530,
+      buy: 350,
+      profit: 180,
+      change: 12.5,
+      interest: "Very high",
+      signal: "Rising",
+      emoji: "🎮"
+    },
+    {
+      id: 2,
+      name: "iPhone 13 Pro Max · 256GB",
+      cat: "Technology",
+      price: 850,
+      buy: 650,
+      profit: 200,
+      change: 8.4,
+      interest: "High",
+      signal: "Popular",
+      emoji: "📱"
+    },
+    {
+      id: 3,
+      name: "Herman Miller Aeron Chair",
+      cat: "Home & Lifestyle",
+      price: 720,
+      buy: 370,
+      profit: 350,
+      change: 6.2,
+      interest: "High",
+      signal: "Rising",
+      emoji: "🪑"
+    },
+    {
+      id: 4,
+      name: "Nike Dunk Low",
+      cat: "Sneakers & Fashion",
+      price: 145,
+      buy: 95,
+      profit: 50,
+      change: 14.2,
+      interest: "Very high",
+      signal: "Rising",
+      emoji: "👟"
+    },
+    {
+      id: 5,
+      name: "Sony WH-1000XM5",
+      cat: "Technology",
+      price: 268,
+      buy: 190,
+      profit: 78,
+      change: 4.2,
+      interest: "High",
+      signal: "Popular",
+      emoji: "🎧"
+    },
+    {
+      id: 6,
+      name: "Labubu Collectible Figure",
+      cat: "Collectibles",
+      price: 82,
+      buy: 42,
+      profit: 40,
+      change: 18.1,
+      interest: "Very high",
+      signal: "Rising",
+      emoji: "🧸"
+    },
+    {
+      id: 7,
+      name: "New Balance 9060",
+      cat: "Sneakers & Fashion",
+      price: 132,
+      buy: 99,
+      profit: 33,
+      change: 7.8,
+      interest: "High",
+      signal: "Popular",
+      emoji: "👟"
+    },
+    {
+      id: 8,
+      name: "LEGO Collector Set",
+      cat: "Collectibles",
+      price: 189,
+      buy: 150,
+      profit: 39,
+      change: -1.8,
+      interest: "Medium",
+      signal: "Steady",
+      emoji: "🧱"
+    }
+  ];
+
+
+  let listings = [
+    {
+      id: 101,
+      name: "Vintage varsity jacket",
+      cat: "Sneakers & Fashion",
+      price: 78,
+      condition: "Good",
+      emoji: "🧥"
+    },
+    {
+      id: 102,
+      name: "Mechanical gaming keyboard",
+      cat: "Technology",
+      price: 65,
+      condition: "Like new",
+      emoji: "⌨️"
+    }
+  ];
+
+
+  let saved = new Set([1, 4, 6]);
+
+
+  const titles = {
+    dashboard: "Dashboard",
+    feed: "Live Feed",
+    listings: "Listing Manager",
+    saved: "Saved Items",
+    analytics: "Analytics",
+    settings: "Settings",
+    sell: "Create a Listing"
+  };
+
+
+  function toast(message) {
+    const t = document.getElementById("toast");
+    t.textContent = message;
+    t.classList.add("show");
+
+
+    setTimeout(() => {
+      t.classList.remove("show");
+    }, 2200);
+  }
+
+
+  function safe(value) {
+    return String(value).replace(/[&<>"']/g, c => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[c]);
+  }
+
+
+  function go(id) {
+    document.querySelectorAll(".page").forEach(page => {
+      page.classList.toggle("active", page.id === id);
+    });
+
+
+    document.querySelectorAll(".nav button").forEach(button => {
+      button.classList.toggle("active", button.dataset.page === id);
+    });
+
+
+    document.getElementById("title").textContent = titles[id];
+
+
+    if (id === "feed") renderFeed();
+    if (id === "listings") renderListings();
+    if (id === "saved") renderSaved();
+
+
+    window.scrollTo(0, 0);
+  }
+
+
+  document.querySelectorAll(".nav button").forEach(button => {
+    button.onclick = () => go(button.dataset.page);
+  });
+
+
+  function itemCard(p) {
+    return `
+    <article class="item">
+      <div class="photo">${p.emoji || "📦"}</div>
+      <h3>${safe(p.name)}</h3>
+      <p>${safe(p.cat || "Other")}</p>
+      <div class="price">$${p.price}</div>
+      <button onclick="saveItem(${p.id})">
+        ${saved.has(p.id) ? "♥ Saved · Remove" : "♡ Save Item"}
+      </button>
+    </article>
+  `;
+  }
+
+
+  function recent(p) {
+    return `
+    <article class="find">
+      <div class="photo">${p.emoji}</div>
+
+
+      <div>
+        <div class="findtop">
+          <h3>${safe(p.name)}</h3>
+          <div class="profit">+$${p.profit}</div>
+        </div>
+
+
+        <span class="source">${p.signal} opportunity · Sample data</span>
+
+
+        <div class="buy">
+          <div>Buy estimate<strong>$${p.buy}</strong></div>
+          <div>Est. resale<strong>$${p.price}</strong></div>
+        </div>
+      </div>
+    </article>
+  `;
+  }
+
+
+  function renderDash() {
+    document.getElementById("recent").innerHTML =
+            products.slice(0, 3).map(recent).join("");
+
+
+    document.getElementById("listedCount").textContent =
+            listings.length;
+  }
+
+
+  function renderFeed() {
+    const q = document.getElementById("q").value.toLowerCase();
+    const filter = document.getElementById("filter").value;
+
+
+    const results = products.filter(p =>
+            (p.name + " " + p.cat).toLowerCase().includes(q) &&
+            (filter === "all" || p.signal === filter)
+    );
+
+
+    document.getElementById("feedCards").innerHTML =
+            results.length
+                    ? results.map(itemCard).join("")
+                    : '<div class="empty">No products found.</div>';
+  }
+
+
+  function renderListings() {
+    document.getElementById("listingCards").innerHTML =
+            listings.length
+                    ? listings.map(itemCard).join("")
+                    : '<div class="empty">No listings yet.</div>';
+  }
+
+
+  function renderSaved() {
+    const results = products.filter(p => saved.has(p.id));
+
+
+    document.getElementById("savedCards").innerHTML =
+            results.length
+                    ? results.map(itemCard).join("")
+                    : '<div class="empty">No saved items yet.</div>';
+  }
+
+
+  function saveItem(id) {
+    if (saved.has(id)) {
+      saved.delete(id);
+      toast("Removed from Saved Items");
+    } else {
+      saved.add(id);
+      toast("Added to Saved Items");
+    }
+
+
+    renderFeed();
+    renderSaved();
+  }
+
+
+  document.getElementById("rows").innerHTML =
+          products.map(p => `
+    <tr>
+      <td>${p.emoji} ${safe(p.name)}</td>
+      <td>$${p.price}</td>
+      <td class="up">${p.change > 0 ? "+" : ""}${p.change}%</td>
+      <td>${p.interest}</td>
+      <td>${p.signal}</td>
+    </tr>
+  `).join("");
+
+
+  document.getElementById("sellForm").addEventListener("submit", e => {
+    e.preventDefault();
+
+
+    const category = document.getElementById("cat").value;
+
+
+    const emojis = {
+      "Sneakers & Fashion": "👟",
+      "Technology": "💻",
+      "Collectibles": "🧸",
+      "Gaming": "🎮",
+      "Home & Lifestyle": "🪑",
+      "Other": "📦"
+    };
+
+
+    listings.unshift({
+      id: Date.now(),
+      name: document.getElementById("name").value,
+      cat: category,
+      price: Number(document.getElementById("price").value),
+      condition: document.getElementById("condition").value,
+      emoji: emojis[category]
+    });
+
+
+    e.target.reset();
+
+
+    renderDash();
+    go("listings");
+    toast("Your demo listing was published!");
+  });
+
+
+  renderDash();
+  renderFeed();
+  renderListings();
+  renderSaved();
+</script>
+</body>
+</html>

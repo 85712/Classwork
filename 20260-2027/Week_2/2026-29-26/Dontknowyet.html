@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Development Presentation</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #101827;
+            color: white;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: #7dd3fc;
+        }
+
+        header p {
+            color: #cbd5e1;
+        }
+
+        .topics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .topic {
+            padding: 20px;
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.2s;
+        }
+
+        .topic:hover {
+            background: #334155;
+            border-color: #7dd3fc;
+            transform: translateY(-3px);
+        }
+
+        #definition {
+            display: none;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 25px;
+            background: #1e293b;
+            border-left: 5px solid #7dd3fc;
+            border-radius: 10px;
+            line-height: 1.7;
+        }
+
+        #definition h2 {
+            color: #7dd3fc;
+        }
+
+        #definition button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #7dd3fc;
+            color: #101827;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        footer {
+            margin-top: 35px;
+            text-align: center;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Web Development Presentation</h1>
+    <p>Click a topic to learn its definition.</p>
+</header>
+
+<main>
+    <section class="topics">
+        <button class="topic" onclick="showTopic('wordpress')">
+            WordPress
+        </button>
+
+        <button class="topic" onclick="showTopic('drupal')">
+            Drupal
+        </button>
+
+        <button class="topic" onclick="showTopic('cms')">
+            Content Management System (CMS)
+        </button>
+
+        <button class="topic" onclick="showTopic('php')">
+            PHP
+        </button>
+
+        <button class="topic" onclick="showTopic('architecture')">
+            Three-Tier Architecture
+        </button>
+
+        <button class="topic" onclick="showTopic('accessibility')">
+            Accessibility and WCAG 2.1
+        </button>
+
+        <button class="topic" onclick="showTopic('usability')">
+            Usability
+        </button>
+
+        <button class="topic" onclick="showTopic('ancestor')">
+            Ancestor and Parent
+        </button>
+
+        <button class="topic" onclick="showTopic('descendant')">
+            Child and Descendant
+        </button>
+    </section>
+
+    <section id="definition" aria-live="polite">
+        <h2 id="topicTitle"></h2>
+        <p id="topicDefinition"></p>
+        <p><strong>Example:</strong> <span id="topicExample"></span></p>
+        <button onclick="closeTopic()">Close</button>
+    </section>
+</main>
+
+<footer>
+    Interactive Web Development Presentation
+</footer>
+
+<script>
+    const topics = {
+        wordpress: {
+            title: "WordPress",
+            definition:
+                "WordPress is a popular content management system used to create and manage websites without needing to write all the code yourself.",
+            example:
+                "A person can use WordPress to create a blog or a school website."
+        },
+
+        drupal: {
+            title: "Drupal",
+            definition:
+                "Drupal is a content management system used to build and manage websites. It offers flexible tools for organizing content and managing users.",
+            example:
+                "An organization can use Drupal to manage a large website."
+        },
+
+        cms: {
+            title: "Content Management System (CMS)",
+            definition:
+                "A CMS is software that allows people to create, edit, organize, and publish website content without having to build every page from scratch.",
+            example:
+                "WordPress and Drupal are examples of CMS platforms."
+        },
+
+        php: {
+            title: "PHP",
+            definition:
+                "PHP is a server-side programming language commonly used to create dynamic websites and work with databases.",
+            example:
+                "PHP can process a login form and retrieve information from a database."
+        },
+
+        architecture: {
+            title: "Three-Tier Architecture",
+            definition:
+                "Three-tier architecture organizes an application into three layers: the presentation layer, the application or logic layer, and the data layer.",
+            example:
+                "A website displays information, processes a request, and retrieves stored data from a database."
+        },
+
+        accessibility: {
+            title: "Accessibility and WCAG 2.1",
+            definition:
+                "Web accessibility means designing websites so people with disabilities can use them. WCAG 2.1 provides guidelines for making web content more accessible.",
+            example:
+                "Adding alternative text to meaningful images helps people who use screen readers."
+        },
+
+        usability: {
+            title: "Usability",
+            definition:
+                "Usability describes how easy and efficient a website or application is for people to understand and use.",
+            example:
+                "A clear navigation menu helps visitors find information quickly."
+        },
+
+        ancestor: {
+            title: "Ancestor and Parent",
+            definition:
+                "In HTML, a parent is an element that directly contains another element. An ancestor is any element higher up in the nesting structure.",
+            example:
+                "In <main><p>Hello</p></main>, main is the direct parent of p and also its ancestor."
+        },
+
+        descendant: {
+            title: "Child and Descendant",
+            definition:
+                "In HTML, a child is an element directly inside another element. A descendant is any element nested inside another element, whether directly or indirectly.",
+            example:
+                "In <main><section><p>Hello</p></section></main>, section is a child of main, while p is a descendant of main."
+        }
+    };
+
+    function showTopic(topicKey) {
+        const topic = topics[topicKey];
+
+        document.getElementById("topicTitle").textContent =
+            topic.title;
+
+        document.getElementById("topicDefinition").textContent =
+            topic.definition;
+
+        document.getElementById("topicExample").textContent =
+            topic.example;
+
+        document.getElementById("definition").style.display = "block";
+
+        document.getElementById("definition").scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+
+    function closeTopic() {
+        document.getElementById("definition").style.display = "none";
+    }
+</script>
+
+</body>
+</html>
