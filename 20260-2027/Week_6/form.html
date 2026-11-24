@@ -1,0 +1,52 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Webpage Activity</title>
+</head>
+
+<body>
+
+<header>
+    <h1>Today's School Webpage Activities</h1>
+</header>
+
+<main>
+
+    <form method="get" action="/info_process.php">
+
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname"><br>
+
+        <label for="todaysdate">Date</label>
+        <input type="date" id="todaysdate" name="todaysdate"><br>
+
+        <label for="events">Did you create or update any school events?</label>
+        <input type="text" id="events" name="events"><br>
+
+        <label for="students">Did you make any posts about students or families?</label>
+        <input type="text" id="students" name="students"><br>
+
+        <label for="coop">Did you create any posts about the co-op program?</label>
+        <input type="text" id="coop" name="coop"><br>
+
+        <label for="skills">What new skills did you learn today?</label>
+        <textarea id="skills" name="skills" rows="4" cols="40"></textarea><br>
+
+        <label for="teamwork">How did you work together with your classmates?</label>
+        <textarea id="teamwork" name="teamwork" rows="4" cols="40"></textarea><br>
+
+        <label for="experience">What did you enjoy most about today's activity?</label>
+        <textarea id="experience" name="experience" rows="4" cols="40"></textarea><br>
+
+        <input type="submit" name="Submit Form" value="Submit Form">
+
+    </form>
+
+</main>
+
+</body>
+</html>
